@@ -9,9 +9,9 @@ import {
 
 const router = express.Router();
 
+router.post('/createProduct', protect, adminOnly, createProduct);  // Normal Admin ONLY
 router.get('/category/:category', getProductsByCategory);
 
-router.post('/createProduct', protect, adminOnly, createProduct);  // Normal Admin ONLY
 router.get('/', protect, getProducts);
 router.route('/:id')
   .get(protect, getProduct)

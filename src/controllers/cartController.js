@@ -2,22 +2,51 @@ import asyncHandler from '../utils/asyncHandler.js';
 import Cart from '../models/cartModel.js';
 import Product from '../models/productModel.js';
 
-export const getCart = asyncHandler(async (req, res) => {
-      console.log('DEBUG USER:', req.user?._id); 
-        console.log(' PRODUCT ID:', req.body.productId);
+
+// export const getCart = asyncHandler(async (req, res) => {
+//       console.log('DEBUG USER:', req.user?._id); 
+//         console.log(' PRODUCT ID:', req.body.productId);
 
 
-  const cart = await Cart.findOne({ userId: req.user._id })
-    .populate('items.productId', 'name');
+//   const cart = await Cart.findOne({ userId: req.user._id })
+//     .populate('items.productId', 'name');
 
-      console.log('DEBUG CART:', cart?.items?.length || 0); 
+//       console.log('DEBUG CART:', cart?.items?.length || 0); 
 
     
-  res.json({
+//   res.json({
+//     success: true,
+//     items: cart?.items || [],
+//     totalAmount: cart?.totalAmount || 0,
+//     message: " Cart loaded from MongoDB!"
+//   });
+// });
+
+export const getCart=asyncHandler(async(req,res)=>{
+  if (!req.user || !req.user._id) {
+    return res.status(401).json({
+      suceess:false,
+      message:"user not authenticated"
+    });
+  }
+  console.log(req.user._id);
+
+  const cart = await Cart.findOne({ userId:req.user._id })
+  .populate("items.productId", "name price");
+if (!cart) {
+  return res.status(200).json({
+    success:false,
+    items:[],
+    totalAmount:0,
+    message: "cart is empty",
+  });
+}
+  console.log(cart.items.length);
+  res.status(200).json({
     success: true,
-    items: cart?.items || [],
-    totalAmount: cart?.totalAmount || 0,
-    message: " Cart loaded from MongoDB!"
+    items: cart.items,
+    totalAmount: cart.totalAmount,
+    message: "Cart loaded from MongoDB!",
   });
 });
 

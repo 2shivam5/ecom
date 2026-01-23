@@ -40,7 +40,7 @@ export const createOrder = asyncHandler(async (req, res) => {
   cart.totalAmount = 0;
   await cart.save();
 
-  res.status(201).json({ success: true, message: "Order Placed Successfully (COD)", order });
+  res.status(201).json({ success: true, message: "Order Placed Successfully (COD)" });
 });
 
 export const getMyOrders = asyncHandler(async (req, res) => {
@@ -105,6 +105,7 @@ export const verifyDeliveryOtp = asyncHandler(async (req, res) => {
 
   order.orderStatus = "delivered";
   order.isDelivered = true;
+  isPaid:true,
   order.deliveryConfirmed = true;
   order.deliveredAt = Date.now();
   order.deliveryOtp = undefined;
