@@ -46,7 +46,7 @@ if (!cart) {
     success: true,
     items: cart.items,
     totalAmount: cart.totalAmount,
-    message: "Cart loaded from MongoDB!",
+    message: "Cart loaded!",
   });
 });
 
@@ -125,7 +125,7 @@ cart.items=cart.items.filter(item => item.productId.toString() !==req.params.pro
   );
 
 await cart.save();
-console.log('item left: ${cart.items.length}');
+console.log("item left:", cart.items.length);
 
 res.json({
     success:true,

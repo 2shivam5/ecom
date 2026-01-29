@@ -5,9 +5,18 @@ import userRoutes from "./routes/userRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js"
+import testRoutes from "./routes/testRoutes.js";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs"; 
 import User from "./models/userModel.js"; 
+import dotenv from "dotenv";
+dotenv.config();
+
+// console.log("MAIL_HOST:", process.env.MAIL_HOST);
+// console.log("MAIL_PORT:", process.env.MAIL_PORT);
+// console.log("MAIL_USER length:", process.env.MAIL_USER?.length);
+// console.log("MAIL_PASS length:", process.env.MAIL_PASS?.length);
+
 
 
 const app = express();
@@ -20,6 +29,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders",orderRoutes);
+app.use("/api/test", testRoutes);
 
 
 app.post("/api/create-admin", async (req, res) => {
