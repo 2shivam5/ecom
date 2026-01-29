@@ -2,7 +2,9 @@ import asyncHandler from "../utils/asyncHandler.js";
 import { Cart } from "../models/cartModel.js";
 import Product from "../models/productModel.js";
 import Order from "../models/orderModel.js";
-import { sendOTPEmail } from "../utils/sendMail.js";
+import { sendMail, sendOTPEmail } from "../utils/sendMail.js";
+import { buildInvoicePdfBuffer } from "../utils/genrateBill.js";
+
 
 export const createOrder = asyncHandler(async (req, res) => {
   const { shippingAddress } = req.body;
@@ -157,7 +159,7 @@ E-Commerce Team`,
 export const verifyDeliveryOtp = asyncHandler(async (req, res) => {
   const { otp } = req.body;
 
-  const order = await Order.findById(req.params.id);
+  const order = await Order.findById(req.params.id).populate("user", "email name");
   if (!order) return res.status(404).json({ message: "Order not found" });
 
   if (!order.deliveryOtp) {
@@ -179,12 +181,32 @@ export const verifyDeliveryOtp = asyncHandler(async (req, res) => {
   order.isPaid = true;
   order.deliveryConfirmed = true;
   order.deliveredAt = new Date();
-
   
   order.deliveryOtp = undefined;
   order.deliveryOtpExpiresAt = undefined;
 
   await order.save();
 
+  const invoiceBuffer = await buildInvoicePdfBuffer(order);
+  
+  await sendMail({
+    to: order.user.email,
+    subject: "Your Invoice - Order Delivered",
+    text: `Hi ${order.user.name},
+
+Your order has been delivered successfully.
+Please find your invoice attached.
+
+Thank you for shopping with us.`,
+    attachments: [
+      {
+        filename: `invoice_${order._id}.pdf`,
+        content: invoiceBuffer,
+      },
+    ],
+  });
+
   res.json({ success: true, message: "Order delivered successfully with OTP verification." });
 });
+
+
