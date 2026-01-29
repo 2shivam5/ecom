@@ -138,8 +138,16 @@ export const sendDeliveryOtp = asyncHandler(async (req, res) => {
 
   await sendOTPEmail({
     to: order.user.email,
-    name: order.user.name,
-    otp,
+    subject: "Delivery OTP",
+    text: `Hi ${order.user.name},
+
+Your delivery OTP is: ${otp}
+
+This OTP is valid for 10 minutes.
+Please share it only with the delivery person.
+
+Thanks,
+E-Commerce Team`,
   });
 
   res.json({ success: true, message: "OTP sent successfully on email" });

@@ -6,6 +6,7 @@ import adminRoutes from "./routes/adminRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js"
 import testRoutes from "./routes/testRoutes.js";
+import passwordRoutes from "./routes/passwordRoutes.js";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs"; 
 import User from "./models/userModel.js"; 
@@ -30,6 +31,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders",orderRoutes);
 app.use("/api/test", testRoutes);
+app.use("/api/password", passwordRoutes);
 
 
 app.post("/api/create-admin", async (req, res) => {

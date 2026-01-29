@@ -32,6 +32,21 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  forgotOtp: 
+  { 
+    type: String
+   },
+  forgotOtpExpiresAt: 
+  {
+     type: Date 
+    },
+  forgotOtpAttempts:
+   {
+    type: Number, 
+    default: 0
+   },
+
+
   // tokens: [{
   //   token: {
   //     type: String,

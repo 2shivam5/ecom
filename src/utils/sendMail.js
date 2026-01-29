@@ -9,14 +9,12 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const sendOTPEmail = async ({ to, name, otp }) => {
+export const sendOTPEmail = async ({ to, name, subject, text }) => {
   await transporter.sendMail({
     from: process.env.MAIL_USER,
     to,
-    subject: "Delivery OTP",
-    text: `Hi ${name}, This is a secret code it is use to verify your delivery
-    it is valid for 10 minutes
-    thanks a lot! ${otp}`,
+    subject,
+    text,
   });
 };
 
