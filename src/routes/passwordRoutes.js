@@ -1,13 +1,16 @@
 import express from 'express';
 import {
-  requestForgotPassword,
+  requestForgotPasswordOtp,
   verifyForgotPasswordOtp,
+  changePassword
 } from '../controllers/passwordController.js';
 
 const router = express.Router();
 
-router.post('/request-reset', requestForgotPassword);
+router.post('/request-otp', requestForgotPasswordOtp);
 
-router.post('/reset', verifyForgotPasswordOtp);
+router.post('/verify-otp', verifyForgotPasswordOtp);
+
+router.post('/change-password', changePassword);
 
 export default router;

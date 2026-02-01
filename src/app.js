@@ -8,6 +8,7 @@ import orderRoutes from "./routes/orderRoutes.js"
 import testRoutes from "./routes/testRoutes.js";
 import passwordRoutes from "./routes/passwordRoutes.js";
 import billRoutes from "./routes/billRoutes.js";
+import "./events/listeners/emailListeners.js";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs"; 
 import User from "./models/userModel.js"; 

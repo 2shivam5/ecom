@@ -36,15 +36,11 @@ const userSchema = new mongoose.Schema({
   { 
     type: String
    },
-  forgotOtpExpiresAt: 
-  {
-     type: Date 
-    },
-  forgotOtpAttempts:
-   {
-    type: Number, 
+ 
+   forgotOtpVerified: {
+    type: Number,
     default: 0
-   },
+   }
 
 
   // tokens: [{
