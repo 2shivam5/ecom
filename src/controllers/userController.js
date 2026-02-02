@@ -1,11 +1,10 @@
 
-
-
 import asyncHandler from '../utils/asyncHandler.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/userModel.js';
 import Product from "../models/productModel.js";
+import mongoose from 'mongoose';
  
 
 // export const regUserAndAdmin=asyncHandler(async(req,res)=>{
@@ -37,6 +36,24 @@ import Product from "../models/productModel.js";
 //   }
 // });
 // });
+
+export const getUserById = asyncHandler(async(req,res)=>{
+ const { id }= req.params;
+
+ if (!mongoose.Types.ObjectId.isValid(id)) {
+  return res.status(400)
+  .json({message:"Invalid user ID"});
+
+ }
+ const user=await User.findById(id).select("-password -tokens");
+ 
+ if (!user) {
+  return res.status(404)
+  .json({message:"User not found"});
+ }
+  res.json(user);
+});
+
 
 export const getUserProfile = asyncHandler(async (req, res) => {
   console.log("PROFILE:", req.user.name);
