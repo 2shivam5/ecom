@@ -98,7 +98,9 @@ export const loginUser = async (req, res) => {
 
     if (existingUser.email === "gadmin@gmail.com") {
       console.log("gadmin activated!");
-    } else {
+    } 
+    
+    else {
       const isMatch = await existingUser.comparePassword(password);
       console.log("PASSWORD MATCH:", isMatch);
       if (!isMatch) {

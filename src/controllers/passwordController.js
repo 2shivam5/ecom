@@ -1,6 +1,7 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import User from "../models/userModel.js";
 import  eventBus  from "../events/eventBus.js";
+import bcrypt from "bcryptjs";
 //import { sendEmailinBackground } from "../services/emailServices.js";
 
 const generateOTP = () => {
@@ -24,7 +25,7 @@ export const requestForgotPasswordOtp=asyncHandler(async(req,res)=>{
     const otp=generateOTP();
     console.log("forgot password OTP:",otp);
 
-    user.forgotOtp=otp;
+    user.forgotOtp=await bcrypt.hash(otp,7);
     user.forgotOtpVerified=0;
     await user.save();
 
@@ -46,6 +47,7 @@ export const verifyForgotPasswordOtp=asyncHandler(async(req,res)=>{
         return res.status(400)
         .json({message:"Email and OTP are required"});
     }
+
     const user=await User.findOne({email,role:{$in:["user","admin"]}});
 
     if(!user){
@@ -56,16 +58,16 @@ export const verifyForgotPasswordOtp=asyncHandler(async(req,res)=>{
         return res.status(400)  
         .json({message:"OTP not requested"});
     }
-    if(user.forgotOtp!==otp){
-        return res.status(400)
-        .json({message:"Invalid OTP"});
-    }
-   
-    user.forgotOtpVerified=1;
-    await user.save();
-    
+    const isMatch = await bcrypt.compare(otp, user.forgotOtp);
+        if (!isMatch) {            
+            return res.status(400)
+            .json({message:"Invalid OTP"});
+        }
+        
+        user.forgotOtpVerified=1;
+        await user.save();
+
     res.json({success:true,
-        success:true,
         message:"OTP verified successfully. You can now reset your password."
     });
     
