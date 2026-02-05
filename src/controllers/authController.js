@@ -112,10 +112,11 @@ export const loginUser = async (req, res) => {
       { 
         userId: existingUser._id, 
         role: existingUser.role, 
-        isAdmin: existingUser.isAdmin 
+        isAdmin: existingUser.isAdmin,
+        email: existingUser.email
       },
       process.env.JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: "1d" }
     );
 
     // await User.updateOne(
